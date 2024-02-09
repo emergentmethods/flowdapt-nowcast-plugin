@@ -1,0 +1,41 @@
+kind: workflow
+metadata:
+  name: create_features
+  annotations:
+    group: nowcast
+spec:
+  stages:
+    - name: create_parameterization_lists
+      target: flowdapt_nowcast_plugin.stages.create_parameterization_lists
+      resources:
+        cpus: 0.5
+
+    - name: get_unique_city_iterable
+      target: flowdapt_nowcast_plugin.stages.get_unique_city_iterable
+      depends_on:
+        - create_parameterization_lists
+      resources:
+        cpus: 1
+
+    - name: get_and_publish_data
+      target: flowdapt_nowcast_plugin.stages.get_and_publish_data
+      type: parameterized
+      depends_on:
+        - get_unique_city_iterable
+      resources:
+        cpus: 1
+
+    - name: get_target_city_iterable
+      target: flowdapt_nowcast_plugin.stages.get_target_city_iterable
+      depends_on:
+        - get_and_publish_data
+      resources:
+        cpus: 1
+
+    - name: construct_dataframes
+      target: flowdapt_nowcast_plugin.stages.construct_dataframes
+      type: parameterized
+      depends_on:
+        - get_target_city_iterable
+      resources:
+        cpus: 1

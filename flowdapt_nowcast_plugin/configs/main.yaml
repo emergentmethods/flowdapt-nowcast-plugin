@@ -1,0 +1,40 @@
+kind: config
+metadata:
+  name: main
+  annotations:
+    group: nowcast
+spec:
+  selector:
+    type: annotation
+    value:
+      group: nowcast
+  data:
+    study_identifier: "openmeteo_test"
+    model_train_parameters:
+      # xgboost parameters
+      n_jobs: 4
+      n_estimators: 200
+      # device: "cuda"
+      # tree_method: "hist"
+      alpha: 0.5
+      min_child_weight: 5
+      learning_rate: 0.1
+      eval_metric: "rmse"
+      max_depth: 6
+      verbosity: 1
+      lookback: 6
+      # # neural net parameters for PyTorch variants
+      # epochs: 10  # 35
+      # batch_size: 64
+      # lookback: 6
+      # hidden_dim: 2048
+      # shuffle: True
+      # num_threads: 4
+    extras:
+      weight_factor: 0.9
+      di_threshold: 5.0
+      num_points: 1200  # 3500
+      artifact_only: true
+      data_split_parameters:
+        test_size: 256
+        shuffle: false

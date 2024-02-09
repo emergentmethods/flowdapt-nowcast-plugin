@@ -1,0 +1,11 @@
+kind: trigger_rule
+metadata:
+  name: feature_update
+spec:
+  type: schedule
+  rule:
+    - "1 * * * *"
+  action:
+    target: run_workflow
+    parameters:
+      workflow: create_features

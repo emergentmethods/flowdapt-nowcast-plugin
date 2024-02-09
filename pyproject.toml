@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "flowdapt_nowcast_plugin"
+version = "0.1.0"
+description = "An example plugin for Flowdapt that uses OpenMeteo data."
+authors = ["Emergent Methods <contact@emergentmethods.ai>"]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.10',
+    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+    'Topic :: Software Development :: Libraries :: Application Frameworks',
+    'Topic :: System :: Distributed Computing',
+    'Topic :: Utilities',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Environment :: Web Environment',
+    'Topic :: Meteorological Data Collection and Analysis',
+    'Topic :: Weather Forecasting',
+    'Topic :: Climate Science',
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flowdapt = ">=0.1.0, <1.0.0"
+flowml = ">=0.1.0"
+openmeteo-py = "0.0.1"
+datasieve = "^0.1.5"
+geopy = "^2.3.0"
+pandas = "^2.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
+coverage = "^7.2.3"
+
+
+[tool.pytest.ini_options]
+addopts = "-s -p no:warnings"
+testpaths = [
+    "tests",
+]
+asyncio_mode = "auto"
+log_cli = "True"
+log_cli_level = "INFO"
+log_auto_indent = "False"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

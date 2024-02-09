@@ -1,0 +1,20 @@
+kind: workflow
+metadata:
+  name: predict
+  annotations:
+    group: nowcast
+spec:
+  stages:
+    - name: get_city_model_iterable
+      target: flowdapt_nowcast_plugin.stages.get_city_model_iterable
+      resources:
+        cpus: 0.5
+
+    - name: predict_pipeline
+      target: flowdapt_nowcast_plugin.stages.predict_pipeline
+      type: parameterized
+      depends_on:
+        - get_city_model_iterable
+      resources:
+        cpus: 4
+        # gpus: 1

@@ -1,0 +1,21 @@
+kind: config
+metadata:
+  name: data
+  annotations:
+    group: nowcast
+spec:
+  selector:
+    type: annotation
+    value:
+      group: nowcast
+  data:
+    data_config:
+      n_days: 50
+      neighbors: 2
+      radius: 150
+      prediction_points: 1
+      target_horizon: 6
+      city_data_path: "flowdapt_nowcast_plugin/data/uscities.csv"
+      model: "XGBoostRegressor"
+      cities: ['Los Angeles', 'Miami']
+      targets: ["temperature_2m", "windspeed_10m", "cloudcover"]
