@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flowdapt_nowcast_plugin"
-version = "0.0.0"
+version = "0.1.0"
 description = "An example plugin for Flowdapt that uses OpenMeteo data."
 authors = ["Emergent Methods <contact@emergentmethods.ai>"]
 license = "MIT"
