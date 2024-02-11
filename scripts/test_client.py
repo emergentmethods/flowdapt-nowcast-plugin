@@ -6,30 +6,27 @@ import cloudpickle
 import pandas as pd
 from pathlib import Path
 
+SERVER_URL = "http://localhost:8080"
+STUDY_IDENTIFIER = "full_uscities"
+HISTORIC_PREDICTIONS_PATH = Path(f"/srv/flowdapt/historic_predictions_{STUDY_IDENTIFIER}.pkl")
+
 
 async def main(historic_predictions):
-    # Defining the host is optional and defaults to http://127.0.0.1:8080/api/latest
-    # See configuration.py for a list of all supported configuration parameters.
-    configuration = flowdapt_sdk.Configuration(
-        host="http://127.0.0.1:8080/api/latest"
-    )
-    # Enter a context with an instance of the API client
-    async with flowdapt_sdk.ApiClient(configuration) as api_client:
-        # Create an instance of the API class
-        api_instance = flowdapt_sdk.WorkflowsApi(api_client)
+    async with flowdapt_sdk.FlowdaptSDK(base_url=SERVER_URL, timeout=2400.0) as sdk:
+        # Enter a context with an instance of the API Client
         first = True
         while True:
             current_time = time.localtime()
             if first or (current_time.tm_min == 1):
                 print("Running workflows...")
                 print("Creating features...")
-                api_response = await api_instance.run_workflow("openmeteo_create_features")
+                api_response = await sdk.workflows.run_workflow("openmeteo_create_features")
                 print(f"create_features response: {api_response}")
                 print("Training models...")
-                api_response = await api_instance.run_workflow("openmeteo_train", _request_timeout=2400)
+                api_response = await sdk.workflows.run_workflow("openmeteo_train")
                 print(f"train response: {api_response}")
                 print("Getting predictions...")
-                api_response = await api_instance.run_workflow("openmeteo_predict")
+                api_response = await sdk.workflows.run_workflow("openmeteo_predict")
                 print(f"prediction response: {api_response}")
                 # print("The response of WorkflowsApi->get_workflow:\n")
                 # pprint(api_response)
@@ -47,10 +44,9 @@ async def main(historic_predictions):
                 print(f"Current time {current_time}")
                 print(f"Waiting until {current_time.tm_min} is 1")
                 await asyncio.sleep(20)
-                # os.system("clear")
+
 
 def parse_response(historic_predictions: dict, api_response: dict):
-
     result = api_response["result"]["return_predictions"]
     for item in result:
         row = item[0]
@@ -78,12 +74,10 @@ def parse_response(historic_predictions: dict, api_response: dict):
 
 
 if __name__ == '__main__':
-    id = "full_uscities"
-    historic_predictions_path = Path(f"/srv/flowdapt/historic_predictions_{id}.pkl")
-
-    if historic_predictions_path.exists():
-        with historic_predictions_path.open("rb") as fp:
-            historic_predictions = cloudpickle.load(fp)
+    if HISTORIC_PREDICTIONS_PATH.exists():
+        historic_predictions = cloudpickle.load(
+            HISTORIC_PREDICTIONS_PATH.read_bytes()
+        )
     else:
         historic_predictions = {}
 

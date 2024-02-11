@@ -115,7 +115,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# Authentication for the server, leave for now
-# but remove before external exposure
-!secrets.env

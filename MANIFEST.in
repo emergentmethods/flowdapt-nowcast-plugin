@@ -1,3 +1,1 @@
-include flowdapt_openmeteo_plugin/workflows/*
-include flowdapt_openmeteo_plugin/triggers/*
-include flowdapt_openmeteo_plugin/data/*
+include flowdapt_nowcast_plugin/data/*

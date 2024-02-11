@@ -1,0 +1,41 @@
+version: '3'
+
+vars:
+  PACKAGE_SRC_DIR: flowdapt_nowcast_plugin
+
+  # Docker specific variables
+  DOCKER_BUILDKIT: 1
+  IMAGE_REGISTRY: docker.io
+  IMAGE_REPOSITORY: flowdapt-nowcast-plugin
+  IMAGE_NAME: "{{.IMAGE_REGISTRY}}/{{.IMAGE_REPOSITORY}}"
+  IMAGE_TAG: local
+  DOCKER_BUILD_ARGS: ""
+  FLOWDAPT_VERSION: 0.1.2
+
+tasks:
+  lint:
+    cmds:
+      - flake8 {{.PACKAGE_SRC_DIR}}
+
+  unit-tests:
+    cmds:
+      - coverage run -m pytest --junitxml=report.xml
+      - coverage report
+      - coverage xml
+      - coverage html -d coverage-report
+
+  build:
+    cmds:
+      - docker build {{.DOCKER_BUILD_ARGS}} --build-arg FLOWDAPT_VERSION={{.FLOWDAPT_VERSION}} -t {{.IMAGE_NAME}}:{{.IMAGE_TAG}} .
+
+  build-whl:
+    cmds:
+      - poetry build --format wheel
+
+  run:
+    cmds:
+      - docker compose up -d
+
+  stop:
+    cmds:
+      - docker compose down

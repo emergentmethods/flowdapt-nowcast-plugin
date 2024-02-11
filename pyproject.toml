@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flowdapt_nowcast_plugin"
-version = "0.1.0"
+version = "0.0.0"
 description = "An example plugin for Flowdapt that uses OpenMeteo data."
 authors = ["Emergent Methods <contact@emergentmethods.ai>"]
 license = "MIT"
@@ -22,6 +22,8 @@ classifiers = [
     'Topic :: Climate Science',
 ]
 
+[tool.poetry.plugins."flowdapt.plugins"]
+flowdapt_nowcast_plugin = "flowdapt_nowcast_plugin"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -32,12 +34,18 @@ datasieve = "^0.1.5"
 geopy = "^2.3.0"
 pandas = "^2.0.2"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
 pytest-asyncio = "^0.21.0"
 coverage = "^7.2.3"
 
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+ignore_missing_imports = "True"
 
 [tool.pytest.ini_options]
 addopts = "-s -p no:warnings"
@@ -46,10 +54,21 @@ testpaths = [
 ]
 asyncio_mode = "auto"
 log_cli = "True"
-log_cli_level = "INFO"
 log_auto_indent = "False"
 
+[tool.coverage.run]
+source = ["flowdapt_nowcast_plugin"]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.coverage.report]
+ignore_errors = "true"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "semver"
+version_provider = "poetry"
+update_changelog_on_bump = true
+bump_message = "chore(release): Release $new_version"

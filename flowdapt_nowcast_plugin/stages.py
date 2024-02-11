@@ -18,7 +18,6 @@ from flowdapt.compute.artifacts.dataset.dataframes import dataframe_to_artifact,
 from flowdapt_nowcast_plugin.api import download_data, get_city_grid
 from flowdapt_nowcast_plugin.utils import get_package_datafile_path
 import flowml.utils as mlutils
-from datetime import datetime
 
 CLUSTER_MEMORY_ACTOR_NAME = "cluster_memory"
 
@@ -57,7 +56,7 @@ def create_parameterization_lists():
         data_config["cities"],
         nbrs,
         radius,
-        get_package_datafile_path("data/uscities.csv", "flowdapt_openmeteo_plugin")
+        get_package_datafile_path("data/uscities.csv", "flowdapt_nowcast_plugin")
     )
 
     # build the iterable for our model comparisons
