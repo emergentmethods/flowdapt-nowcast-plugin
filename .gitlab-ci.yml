@@ -29,6 +29,7 @@ workflow:
 # only cache local items.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  VERSION_FILE: ".version"
 
 
 # Pip's cache doesn't store the python packages
