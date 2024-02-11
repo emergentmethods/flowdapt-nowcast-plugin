@@ -1,3 +1,15 @@
+"""
+An example script designed to interact with an active flowdapt server
+via the flowdapt SDK.
+
+The script automates the launching workflows once per hour.
+- create_features
+- train
+- predict
+
+It takes the response from the predict workflow, parses it and saves it to
+a historic_predictions.pkl file for future post-processing.
+"""
 from __future__ import print_function
 import time
 import flowdapt_sdk
@@ -34,9 +46,9 @@ async def main(historic_predictions):
                 # parse the response and save it to disk
                 historic_predictions = parse_response(historic_predictions, api_response)
 
-                with open("/srv/flowdapt/historic_predictions.pkl", "wb") as fp:
-                    cloudpickle.dump(historic_predictions, fp,
-                                     protocol=cloudpickle.DEFAULT_PROTOCOL)
+                HISTORIC_PREDICTIONS_PATH.write_bytes(
+                    cloudpickle.dumps(historic_predictions, protocol=cloudpickle.DEFAULT_PROTOCOL)
+                )
 
                 first = False
                 await asyncio.sleep(5)
@@ -62,13 +74,21 @@ def parse_response(historic_predictions: dict, api_response: dict):
         # Convert preds to a Pandas dataframe
         df = pd.DataFrame(data=[dates + preds + ground_truth], columns=labels)
 
-        # TODO shift ground_truth by respective data points 1, 4, 12
+        name_str = row['city']
+        target = row['target']
 
-        if row["city"] not in historic_predictions:
-            historic_predictions[row["city"]] = df
+        if name_str not in historic_predictions:
+            historic_predictions[name_str] = {}
+
+        if target not in historic_predictions[name_str]:
+            historic_predictions[name_str][target] = df
+        elif historic_predictions[name_str][target]["dates"].iloc[-1] == df["dates"].iloc[-1]:
+            print(f"Already have a prediction for {row['city']} on {df['dates'].iloc[-1]}, "
+                  "skipping historic_predictions update")
+            continue
         else:
-            historic_predictions[row["city"]] = pd.concat(
-                [historic_predictions[row["city"]], df], ignore_index=True, axis=0)
+            historic_predictions[name_str][target] = pd.concat(
+                [historic_predictions[name_str][target], df], ignore_index=True, axis=0)
 
     return historic_predictions
 

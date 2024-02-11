@@ -13,7 +13,10 @@ from datasieve.pipeline import Pipeline
 import datasieve.transforms as ds
 from sklearn.preprocessing import MinMaxScaler
 from flowdapt.compute.artifacts.misc import json_to_artifact, json_from_artifact
-from flowdapt.compute.artifacts.dataset.dataframes import dataframe_to_artifact, dataframe_from_artifact
+from flowdapt.compute.artifacts.dataset.dataframes import (
+    dataframe_to_artifact,
+    dataframe_from_artifact
+)
 
 from flowdapt_nowcast_plugin.api import download_data, get_city_grid
 from flowdapt_nowcast_plugin.utils import get_package_datafile_path

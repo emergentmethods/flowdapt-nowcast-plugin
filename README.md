@@ -31,10 +31,10 @@ flowctl run train
 flowctl run predict
 ```
 
-However, if you want to run the plugin indefinitely to collect hourly predictions, you can use the `python_driver.py` in a separate terminal window or session (Note this script requires the python package `flowdapt_sdk` to be installed, nothing should be done if `flowctl` is installed):
+However, if you want to run the plugin indefinitely to collect hourly predictions, you can use the `python_driver.py` in a separate terminal window or session. To run this script you must have `flowdapt_sdk` installed. If you already have `flowctl` then nothing else is needed:
 
 ```bash
-python3 flowdapt_nowcast_plugin/python_driver.py
+python3 scripts/python_driver.py
 ```
 
 This will call the plugin's workflows via the Flowdapt Rest API every hour.

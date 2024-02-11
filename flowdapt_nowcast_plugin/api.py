@@ -124,9 +124,12 @@ def download_data(md: dict, n_bars: int = 5) -> pd.DataFrame:
     hourly = Hourly()
     hourly.all()
     hourly.temperature_2m()
-    params = ["et0_fao_evapotranspiration", "vapor_pressure_deficit", "cape", "shortwave_radiation_instant",
-              "direct_radiation_instant", "diffuse_radiation_instant", "direct_normal_irradiance_instant",
-              "terrestrial_radiation_instant"]
+    params = [
+        "et0_fao_evapotranspiration", "vapor_pressure_deficit", "cape",
+        "shortwave_radiation_instant", "direct_radiation_instant",
+        "diffuse_radiation_instant", "direct_normal_irradiance_instant",
+        "terrestrial_radiation_instant"
+    ]
     hourly.hourly_params += params
     # pop "pressure_msl" from hourly params
     hourly.hourly_params = [x for x in hourly.hourly_params if x not in [
